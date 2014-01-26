@@ -38,7 +38,7 @@ class Crunch {
    */
   public function toArray($data) {
     if (empty($data))
-      throw new InvalidArgumentException('Empty data');
+      throw new InvalidArgumentException('Empty data.');
 
     return explode("\n", $data);
   }

@@ -84,4 +84,19 @@ class CrunchTest extends PHPUnit_Framework_TestCase {
     $this->assertNull($d);
   }
 
+  function testCrunchToArray() {
+    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $d = $crunch->toArray($crunch->rawRead(2048));
+    $this->assertTrue(is_array($d));
+  }
+
+  /**
+    * @expectedException InvalidArgumentException
+    */
+  function testCrunchToArrayWithEmptyData() {
+    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access_empty.log'));
+    $d = $crunch->toArray($crunch->rawRead(1024));
+    $this->setExpectedException('InvalidArgumentException', 'Empty data.');
+  }
+
 }

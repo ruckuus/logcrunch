@@ -1,0 +1,9 @@
+{
+    "name": "logcrunch/logcrunch",
+    "type": "system",
+    "description": "LogCrunch",
+    "require": {
+        "elasticsearch/elasticsearch": "~0.4"
+    },
+    "minimum-stability": "dev"
+}

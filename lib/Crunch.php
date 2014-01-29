@@ -1,5 +1,7 @@
 <?php
 
+namespace LogCrunch;
+
 class Crunch {
   private $log = "";
   const SLICE = 1024;
@@ -7,7 +9,7 @@ class Crunch {
 
   public function __construct($file) {
     if (!file_exists($file))
-      throw new InvalidArgumentException('Problem reading file');
+      throw new \InvalidArgumentException('Problem reading file');
 
     $this->log = $file;
   }
@@ -15,7 +17,7 @@ class Crunch {
   public function rawRead($byteToRead) {
 
     if ($byteToRead > self::MAX_SLICE)
-      throw new Exception('Slice too big!');
+      throw new \Exception('Slice too big!');
 
     if ($byteToRead < self::SLICE)
       $byteToRead = self::SLICE;
@@ -38,7 +40,7 @@ class Crunch {
    */
   public function toArray($data) {
     if (empty($data))
-      throw new InvalidArgumentException('Empty data.');
+      throw new \InvalidArgumentException('Empty data.');
 
     return explode("\n", $data);
   }

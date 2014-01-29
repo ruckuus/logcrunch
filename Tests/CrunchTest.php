@@ -1,6 +1,6 @@
 <?php
 require_once 'vfsStream/vfsStream.php';
-require_once dirname(__FILE__)  . '/../Crunch.php';
+require_once dirname(__FILE__)  . '/../lib/Crunch.php';
 
 class CrunchTest extends PHPUnit_Framework_TestCase {
   protected $accessLogContent = "
@@ -38,8 +38,8 @@ class CrunchTest extends PHPUnit_Framework_TestCase {
    * Test constructor
    */
   function testCanCreateACrunch() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
-    $this->assertTrue($crunch instanceof Crunch);
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $this->assertTrue($crunch instanceof \LogCrunch\Crunch);
   }
 
   /**
@@ -47,7 +47,7 @@ class CrunchTest extends PHPUnit_Framework_TestCase {
     */
 
   function testCreateACrunchWithFakeLogFile() {
-    $crunch = new Crunch(vfsStream::url('emptyDir/someFakeFile.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('emptyDir/someFakeFile.log'));
     $this->setExpectedException('InvalidArgumentException', 'Problem reading file');
   }
 
@@ -55,37 +55,37 @@ class CrunchTest extends PHPUnit_Framework_TestCase {
    * @expectedException Exception
    */
   function testCrunchSliceTooBig() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
     $crunch->rawRead($crunch::MAX_SLICE + 1);
     $this->setExpectedException('Exception', 'Slice too big!');
   }
 
   function testCrunchRawRead() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
     $d = $crunch->rawRead(1024);
     $this->assertEquals(1024, strlen($d));
   }
 
   function testCrunchRawReadInvalidSlice() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
     $d = $crunch->rawRead(-19);
     $this->assertEquals(1024, strlen($d));
   }
 
   function testCrunchRawReadVerySmallFile() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access_very_small.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access_very_small.log'));
     $d = $crunch->rawRead(1024);
     $this->assertLessThanOrEqual(1024, strlen($d));
   }
 
   function testCrunchRawReadEmptyFile() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access_empty.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access_empty.log'));
     $d = $crunch->rawRead(1024);
     $this->assertNull($d);
   }
 
   function testCrunchToArray() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
     $d = $crunch->toArray($crunch->rawRead(2048));
     $this->assertTrue(is_array($d));
   }
@@ -94,7 +94,7 @@ class CrunchTest extends PHPUnit_Framework_TestCase {
     * @expectedException InvalidArgumentException
     */
   function testCrunchToArrayWithEmptyData() {
-    $crunch = new Crunch(vfsStream::url('varLogDir/accessLog/access_empty.log'));
+    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access_empty.log'));
     $d = $crunch->toArray($crunch->rawRead(1024));
     $this->setExpectedException('InvalidArgumentException', 'Empty data.');
   }

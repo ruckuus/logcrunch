@@ -1,6 +1,9 @@
 <?php
-require_once 'vfsStream/vfsStream.php';
-require_once dirname(__FILE__)  . '/../lib/Crunch.php';
+require_once dirname(__FILE__)  . '/../vendor/autoload.php';
+
+use \org\bovigo\vfs\vfsStream as vfsStream;
+use \org\bovigo\vfs\vfsStreamWrapper as vfsStreamWrapper;
+
 
 class CrunchTest extends PHPUnit_Framework_TestCase {
   protected $accessLogContent = "
@@ -38,7 +41,7 @@ class CrunchTest extends PHPUnit_Framework_TestCase {
    * Test constructor
    */
   function testCanCreateACrunch() {
-    $crunch = new \LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
+    $crunch = new LogCrunch\Crunch(vfsStream::url('varLogDir/accessLog/access.log'));
     $this->assertTrue($crunch instanceof \LogCrunch\Crunch);
   }
 

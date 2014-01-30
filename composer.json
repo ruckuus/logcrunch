@@ -3,7 +3,11 @@
     "type": "system",
     "description": "LogCrunch",
     "require": {
-        "elasticsearch/elasticsearch": "~0.4"
+        "elasticsearch/elasticsearch": "~0.4",
+        "mikey179/vfsStream": ">=1.0.0"
+    },
+    "autoload": {
+        "psr-0": {"LogCrunch": "lib"}
     },
     "minimum-stability": "dev"
 }

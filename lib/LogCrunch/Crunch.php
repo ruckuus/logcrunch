@@ -8,6 +8,7 @@ class Crunch {
   const MAX_SLICE = 1048576; // 1MB
 
   public function __construct($file) {
+
     if (!file_exists($file))
       throw new \InvalidArgumentException('Problem reading file');
 

@@ -4,7 +4,8 @@
     "description": "LogCrunch",
     "require": {
         "elasticsearch/elasticsearch": "~0.4",
-        "mikey179/vfsStream": ">=1.0.0"
+        "mikey179/vfsStream": ">=1.0.0",
+        "symfony/yaml": "dev-master"
     },
     "autoload": {
         "psr-0": {"LogCrunch": "lib"}

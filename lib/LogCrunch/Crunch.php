@@ -52,12 +52,12 @@ class Crunch {
   public function tail() {
       $inotify = inotify_init();
       if ($inotify == false) {
-          return 1;
+          throw new Exception('Unable to initialize inotify.');
       }
 
       $watch = inotify_add_watch($inotify, $this->log, IN_MODIFY);
       if ($watch == false) {
-          return 1;
+          throw new Exception('Unable to watch file.');
       }
 
       $fd = fopen($this->log, "r");

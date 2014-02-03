@@ -21,7 +21,10 @@ class Feeder {
 
     public function index(\LogCrunch\Document $doc) {
         $data = $this->parse($doc);
-        $this->client->index($data);
+        try {
+            $this->client->index($data);
+        } catch (Exception $e) {
+        }
     }
 
     protected function parse(\LogCrunch\Document $doc) {

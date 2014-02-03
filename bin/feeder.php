@@ -10,18 +10,19 @@ function doFeed() {
   $docOpts = array(
     'index' => 'logcrunch',
     'type' => 'access',
+    'body' => '',
+    'meta' => ''
   );
 
   $log = "/var/log/nginx/logcrunch/access.log";
 
   $feeder = new \LogCrunch\Feeder($esOpts);
   $crunch = new \LogCrunch\Crunch($log);
-
-  $pos = 0;
+  $doc = new \LogCrunch\Document();
 
   while(true) {
-    $doc = new \LogCrunch\Document($docOpts);
-    $doc->setContent($crunch->tail($pos));
+    $doc->setOptions($docOpts);
+    $doc->setContent('message', $crunch->tail());
     $feeder->index($doc);
   }
 }

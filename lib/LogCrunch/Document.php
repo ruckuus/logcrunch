@@ -9,12 +9,12 @@ class Document {
         'meta' => '',
     );
 
-    public function setContent($content) {
+    public function setContent($key, $content) {
         try {
             if (empty($content))
                 throw new InvalidArgumentException('Could not set empty content');
 
-            $this->options['body'] = is_array($content) ?  $content : array($content);
+            $this->options['body'] = is_array($content) ?  $content : array($key => $content);
         } catch(Exception $e) {
         }
     }

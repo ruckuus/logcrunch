@@ -49,31 +49,26 @@ class Crunch {
   /**
    * Tail a file
    */
-  public function tail(&$pos) {
-    $fd = inotify_init();
-    $watch = inotify_add_watch($fd, $this->log, IN_ALL_EVENTS);
-
-    while(true) {
-      $events = inotify_read($fd);
-      foreach($events as $e => $ev) {
-        switch(true) {
-        case ($ev['mask'] & IN_MODIFY):
-          inotify_rm_watch($fd, $watch);
-          fclose($fd);
-          $rv = $this->rawRead(self::SLICE);
-          $pos += strlen($rv);
-          return $rv;
-          break;
-        case ($ev['mask'] & IN_DELETE):
-        case ($ev['mask'] & IN_DELETE_SELF):
-        case ($ev['mask'] & IN_MOVE):
-        case ($ev['mask'] & IN_MOVE_SELF):
-          inotify_rm_watch($fd, $watch);
-          fclose($fd);
-          return false;
-          break;
-        }
+  public function tail() {
+      $inotify = inotify_init();
+      if ($inotify == false) {
+          return 1;
       }
-    }
+
+      $watch = inotify_add_watch($inotify, $this->log, IN_MODIFY);
+      if ($watch == false) {
+          return 1;
+      }
+
+      $fd = fopen($this->log, "r");
+      fseek($fd, 0, SEEK_END);
+
+      while(($events = inotify_read($inotify)) !== false) {
+          foreach($events as $event) {
+              if (!($event['mask'] & IN_MODIFY)) continue;
+              $data = stream_get_contents($fd);
+              return $data;
+          }
+      }
   }
 }

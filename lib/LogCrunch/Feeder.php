@@ -16,10 +16,10 @@ class Feeder {
      */
 
     public function __construct(array $option = array()) {
-        $this->client = new \Elasticsearch\Client($option);
+        $this->client = new Elasticsearch\Client($option);
     }
 
-    public function index(\LogCrunch\Document $doc) {
+    public function index(Document $doc) {
         $data = $this->parse($doc);
         try {
             $this->client->index($data);
@@ -27,7 +27,7 @@ class Feeder {
         }
     }
 
-    protected function parse(\LogCrunch\Document $doc) {
+    protected function parse(Document $doc) {
         $data['index'] = $doc->getIndex();
         $data['type'] = $doc->getType();
         $data['body'] = $doc->getBody();
